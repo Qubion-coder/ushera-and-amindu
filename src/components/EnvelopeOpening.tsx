@@ -422,9 +422,9 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
               </div>
 
               <h1 className="text-names">
-                Isuri
+                <span><span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic' }}>A</span>mindu</span>
                 <span className="text-ampersand">&</span>
-                &nbsp;Duvindu
+                &nbsp;Ushera
               </h1>
 
               <div className="divider">
@@ -435,9 +435,9 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
 
               <div className="text-details">
                 Request the honour of your presence<br />
-                <span className="text-date">Tuesday 05 January 2027 At 09:00 AM</span>
-                <span className="text-church">Hilton Colombo</span><br />
-                Colombo
+                <span className="text-date">Thursday 10 December 2026 At 09:00 AM</span>
+                <span className="text-church">The Grand Silveray</span><br />
+                Ratnapura
               </div>
             </div>
           </div>

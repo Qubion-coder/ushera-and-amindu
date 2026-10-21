@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Loader2, Heart, Sparkles } from 'lucide-react';
+import { SCRIPT_URL } from '../config';
 
 export const RSVPForm: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
+    phone: '',
+    attendance: 'Yes',
     guests: '1',
     dietaryNotes: '',
   });
@@ -15,22 +18,22 @@ export const RSVPForm: React.FC = () => {
     setStatus('loading');
 
     try {
-      const scriptUrl = 'https://script.google.com/macros/s/AKfycbyay20jbF63BRUj8JGGbUbYkYS3Us-DpLZc2Hs34si_qKJgxs_81xpNBniXsBNFsYOt7g/exec';
       const payload = new FormData();
       payload.append('sheet', 'RSVP');
       payload.append('name', formData.fullName);
-      payload.append('guests', formData.guests);
+      payload.append('phone', formData.phone);
+      payload.append('attendance', formData.attendance);
+      payload.append('guests', formData.attendance === 'Yes' ? formData.guests : '0');
       payload.append('dietary', formData.dietaryNotes);
-      payload.append('attendance', 'Yes');
 
-      await fetch(scriptUrl, {
+      await fetch(SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         body: payload,
       });
 
       setStatus('success');
-      setFormData({ fullName: '', guests: '1', dietaryNotes: '' });
+      setFormData({ fullName: '', phone: '', attendance: 'Yes', guests: '1', dietaryNotes: '' });
     } catch (error) {
       console.error('Error sending RSVP: ', error);
       setStatus('error');
@@ -90,7 +93,7 @@ export const RSVPForm: React.FC = () => {
                 </div>
                 <h3 className="text-4xl font-display text-stone-800 mb-4 tracking-tight drop-shadow-sm">With Gratitude</h3>
                 <p className="text-stone-500/90 leading-relaxed font-serif text-lg mb-8">
-                  Your response has been warmly received. We cannot wait to celebrate with you!
+                  Your response has been warmly received. Thank you for letting us know!
                 </p>
                 <button
                   onClick={() => setStatus('idle')}
@@ -121,6 +124,41 @@ export const RSVPForm: React.FC = () => {
                 </div>
 
                 <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 ml-2">Phone Number</label>
+                  <input
+                    type="tel"
+                    placeholder="E.g., +94 71 234 5678"
+                    className="w-full bg-white/80 px-6 py-4 rounded-full border border-stone-200/60 focus:ring-2 focus:ring-brand-beige/30 focus:border-brand-beige-deep/40 outline-none transition-all duration-300 font-serif italic text-lg shadow-inner placeholder:text-stone-300"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 ml-2">Will You Attend?</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { value: 'Yes', label: 'Joyfully Accept' },
+                      { value: 'No', label: 'Regretfully Decline' },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, attendance: opt.value })}
+                        className={`py-4 rounded-full border text-[10px] sm:text-[11px] uppercase tracking-[0.15em] font-bold transition-all duration-300 ${
+                          formData.attendance === opt.value
+                            ? 'bg-stone-800 text-brand-champagne border-stone-800 shadow-lg'
+                            : 'bg-white/80 text-stone-500 border-stone-200/60 hover:border-brand-beige-deep/40'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {formData.attendance === 'Yes' && (
+                <div>
                   <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 ml-2">Number of Guests</label>
                   <div className="relative group">
                     <select
@@ -138,6 +176,7 @@ export const RSVPForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                )}
 
                 <div>
                   <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 ml-2">Dietary Notes (Optional)</label>
@@ -158,7 +197,7 @@ export const RSVPForm: React.FC = () => {
                     {status === 'loading' ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      'Confirm Attendance'
+                      'Send Response'
                     )}
                   </button>
                 </div>

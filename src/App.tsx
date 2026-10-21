@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Music, VolumeX, Heart } from 'lucide-react';
+import { Music, VolumeX, Heart, Phone } from 'lucide-react';
 import { Toaster } from 'sonner';
 
 import { EnvelopeOpening } from './components/EnvelopeOpening';
@@ -60,7 +60,7 @@ export default function App() {
   }
 
   // Set the wedding date for the countdown
-  const weddingDate = new Date("2027-01-05T09:00:00");
+  const weddingDate = new Date("2026-12-10T09:00:00+05:30");
 
   return (
     <div className="font-sans text-stone-800 bg-brand-ivory overflow-hidden selection:bg-brand-beige-deep/20">
@@ -116,10 +116,28 @@ export default function App() {
       <footer className="py-12 bg-white border-t border-brand-beige/20 text-center relative overflow-hidden mt-10">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-brand-beige/10 blur-[80px] rounded-full pointer-events-none" />
         <Heart className="w-6 h-6 mx-auto mb-6 text-brand-beige-deep fill-brand-beige/20" />
-        <p className="font-display text-4xl sm:text-5xl text-stone-800 mb-2">Isuri &&nbsp;Duvindu</p>
+        <p className="font-display text-4xl sm:text-5xl text-stone-800 mb-2"><span className="font-playfair italic">A</span>mindu &&nbsp;Ushera</p>
         <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.4em] font-sans text-stone-400 font-semibold block mb-8">
-          January 05, 2027
+          December 10, 2026
         </span>
+
+        <div className="relative max-w-md mx-auto px-6">
+          <span className="text-brand-beige-deep uppercase tracking-[0.4em] text-[10px] sm:text-[11px] font-bold block mb-5">
+            For Inquiries
+          </span>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            {['+94 71 398 8073', '+94 70 273 9670'].map((number) => (
+              <a
+                key={number}
+                href={`tel:${number.replace(/\s/g, '')}`}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-brand-beige/40 bg-brand-ivory/60 text-stone-700 font-sans text-sm tracking-wider hover:border-brand-beige-deep hover:text-brand-beige-deep transition-colors duration-300"
+              >
+                <Phone className="w-4 h-4 text-brand-beige-deep" />
+                {number}
+              </a>
+            ))}
+          </div>
+        </div>
 
       </footer>
     </div>

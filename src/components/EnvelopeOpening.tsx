@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { getGuestDisplayName } from "../guest";
 
 export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () => void, onMusicStart?: () => void }) {
   const [opened, setOpened] = useState(false);
   
-  const params = new URLSearchParams(window.location.search);
-  const prefix = params.get('prefix');
-  const guestName = params.get('name');
+  const guestName = getGuestDisplayName();
 
   useEffect(() => {
     if (opened) {
@@ -412,7 +411,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
               </svg>
 
               <div className="text-eyebrow">
-                {guestName ? `Dear ${prefix} ${guestName},` : 'Promise of Love'}
+                {guestName ? `Dear ${guestName},` : 'Promise of Love'}
               </div>
 
               <div className="divider">

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getGuestDisplayName } from "../guest";
+import { GoldSprig, LotusBud, LotusDivider, LotusFlower, LotusIcon, LotusLeaf } from "./LotusArt";
 
 export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () => void, onMusicStart?: () => void }) {
   const [opened, setOpened] = useState(false);
-  
+
   const guestName = getGuestDisplayName();
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Montserrat:wght@300;400;500&display=swap');
 
         * {
           box-sizing: border-box;
@@ -38,7 +39,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 20px;
+          padding: 20px 20px 80px;
           background: radial-gradient(ellipse at 30% 20%, #FFFFFF 0%, #FAF9F6 40%, #EAE3D2 100%);
           perspective: 1500px;
           overflow: hidden;
@@ -59,20 +60,21 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           height: 400px;
           top: -100px;
           right: -100px;
-          background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(233,163,172,0.25) 0%, transparent 70%);
         }
         .scene::after {
           width: 300px;
           height: 300px;
           bottom: -80px;
           left: -80px;
-          background: radial-gradient(circle, rgba(9,121,105,0.2) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(194,154,75,0.2) 0%, transparent 70%);
         }
 
+        /* 2:3 card, sized to fit both width and height of the screen */
         .envelope-container {
           position: relative;
-          width: min(460px, 92vw);
-          height: min(680px, 85vh);
+          width: min(460px, calc(100vw - 40px), calc(82vh * 2 / 3));
+          aspect-ratio: 2 / 3;
           cursor: pointer;
           transition: transform 0.6s ease;
           transform-style: preserve-3d;
@@ -92,15 +94,21 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           z-index: 1;
         }
 
-        /* Card Container */
+        /* ---------- Lotus invitation card ---------- */
         .card-container {
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, #FFFFFF 0%, #FAF9F6 50%, #FDFBF7 100%);
+          container-type: inline-size;
           border-radius: 6px;
           z-index: 2;
           overflow: hidden;
-          box-shadow: inset 0 0 30px rgba(9,121,105,0.1);
+          background:
+            radial-gradient(ellipse 45% 30% at 8% 12%, rgba(240,196,196,0.45), transparent 70%),
+            radial-gradient(ellipse 40% 35% at 96% 45%, rgba(240,190,195,0.40), transparent 70%),
+            radial-gradient(ellipse 35% 25% at 4% 62%, rgba(240,200,200,0.35), transparent 70%),
+            radial-gradient(ellipse 50% 30% at 90% 95%, rgba(236,186,190,0.35), transparent 70%),
+            linear-gradient(180deg, #FCF9F4 0%, #F9F3EC 100%);
+          box-shadow: inset 0 0 30px rgba(194,154,75,0.12);
           transform: scale(1);
           transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
@@ -110,126 +118,137 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           z-index: 4;
         }
 
-        /* Elegant Gold Double Border */
-        .card-border {
+        .lotus-frame {
           position: absolute;
-          inset: 18px;
-          border: 1.5px solid rgba(212,175,55,0.5);
+          inset: 3.2cqw;
+          border: 1px solid rgba(194,154,75,0.75);
+          pointer-events: none;
+          z-index: 3;
+        }
+        .lotus-frame::before {
+          content: '';
+          position: absolute;
+          inset: 0.9cqw;
+          border: 0.5px solid rgba(194,154,75,0.5);
+        }
+
+        .lotus-art {
+          position: absolute;
+          pointer-events: none;
+          z-index: 1;
+        }
+        .art-tl     { width: 46%; top: -5%;   left: -14%;  transform: rotate(-28deg); opacity: 0.45; }
+        .art-sprig  { width: 18%; top: 44%;   left: -2%;   opacity: 0.8; }
+        .art-leaf-l { width: 40%; bottom: -10%; left: -14%; transform: rotate(200deg); opacity: 0.8; }
+        .art-lotus-r{ width: 44%; top: 30%;   right: -21%; transform: rotate(-12deg); }
+        .art-bud    { width: 11%; top: 52%;   right: 2%;   }
+        .art-leaf-r { width: 32%; top: 62%;   right: -18%; transform: rotate(-30deg); opacity: 0.75; }
+        .art-lotus-b{ width: 46%; bottom: -4%; right: -20%; transform: rotate(-6deg); }
+
+        .lotus-content {
+          position: absolute;
+          inset: 6cqw 15cqw 6cqw 15cqw;
+          z-index: 4;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: 40px 24px;
           text-align: center;
-        }
-
-        .card-border::before {
-          content: '';
-          position: absolute;
-          inset: 7px;
-          border: 0.5px solid rgba(212,175,55,0.2);
-        }
-
-        /* Corner Ornaments */
-        .corner-ornament {
-          position: absolute;
-          width: 60px;
-          height: 60px;
-          pointer-events: none;
-          z-index: 3;
-        }
-        .corner-tl { top: 10px; left: 10px; }
-        .corner-tr { top: 10px; right: 10px; transform: scaleX(-1); }
-        .corner-bl { bottom: 10px; left: 10px; transform: scaleY(-1); }
-        .corner-br { bottom: 10px; right: 10px; transform: scale(-1, -1); }
-
-        /* Decorative Divider */
-        .divider {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin: 16px 0;
-          z-index: 2;
-        }
-        .divider-line {
-          width: 50px;
-          height: 0.5px;
-          background: linear-gradient(90deg, transparent, #D4AF37, transparent);
-        }
-        .divider-diamond {
-          width: 6px;
-          height: 6px;
-          background: #D4AF37;
-          transform: rotate(45deg);
-          opacity: 0.7;
-        }
-
-        /* Typography */
-        .text-eyebrow {
-          font-family: 'Montserrat', sans-serif;
-          font-size: 10px;
-          letter-spacing: 0.45em;
-          text-transform: uppercase;
-          color: #3B1C22;
-          margin-bottom: 20px;
-          margin-top: auto;
-          z-index: 2;
-          font-weight: 400;
-        }
-
-        .text-names {
-          font-family: "Great Vibes", cursive;
-          font-size: 60px;
-          line-height: 1.1;
-          color: #3B1C22;
-          margin: 0 0 10px 0;
-          font-weight: 400;
-          z-index: 2;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        
-        .text-ampersand {
-          font-family: "Great Vibes", cursive;
-          font-size: 40px;
-          display: block;
-          margin: -2px 0;
-          color: #D4AF37;
-          text-shadow: 0 1px 2px rgba(212,175,55,0.3);
-        }
-
-        .text-details {
-          font-family: 'Montserrat', sans-serif;
-          font-size: 9.5px;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: #722F37;
-          line-height: 2.2;
-          margin-bottom: auto;
-          z-index: 2;
-          font-weight: 300;
-        }
-
-        .text-date {
-          display: block;
-          margin: 12px 0;
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 0.28em;
-          color: #3B1C22;
-        }
-
-        .text-church {
+          color: #3F332D;
           font-family: "Cormorant Garamond", serif;
-          font-size: 14px;
-          font-style: italic;
+          font-variant-numeric: lining-nums;
+        }
+
+        .lotus-top { width: 32cqw; display: flex; align-items: center; gap: 2cqw; }
+        .lotus-top span { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #C29A4B); }
+        .lotus-top span:last-child { background: linear-gradient(270deg, transparent, #C29A4B); }
+        .lotus-top svg { width: 11cqw; flex-shrink: 0; }
+
+        .lotus-name {
+          font-family: "Pinyon Script", cursive;
+          font-size: 11.5cqw;
+          line-height: 1.05;
+          color: #B48A3C;
+          margin: 0.6cqw 0 0.4cqw;
           font-weight: 400;
-          letter-spacing: 0.1em;
-          color: #3B1C22;
-          margin-top: 4px;
+          text-shadow: 0 1px 1px rgba(180,138,60,0.15);
+        }
+
+        .lotus-caps {
+          font-size: 2.5cqw;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          line-height: 1.45;
+          font-weight: 500;
+        }
+        .lotus-parents {
+          font-size: 2.9cqw;
+          letter-spacing: 0.08em;
+          font-weight: 600;
+        }
+        .lotus-with { margin: 1.6cqw 0 0.4cqw; }
+
+        .lotus-divider { display: flex; align-items: center; gap: 1.5cqw; width: 52cqw; margin: 1cqw 0; }
+        .lotus-divider span { flex: 1; height: 1px; background: rgba(194,154,75,0.7); }
+        .lotus-divider-icon { width: 6cqw; flex-shrink: 0; }
+
+        .lotus-guest {
+          font-family: "Cormorant Garamond", serif;
+          font-size: 3.4cqw;
+          font-style: italic;
+          font-weight: 600;
+          color: #8A5A3A;
+          letter-spacing: 0.02em;
           text-transform: none;
         }
+
+        .lotus-month {
+          font-size: 3cqw;
+          letter-spacing: 0.4em;
+          margin: 0.8cqw 0 0.2cqw;
+          padding-left: 0.4em;
+        }
+        .lotus-date {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          gap: 2.5cqw;
+          width: 60cqw;
+        }
+        .lotus-date-side {
+          border-top: 1px solid rgba(63,51,45,0.55);
+          border-bottom: 1px solid rgba(63,51,45,0.55);
+          padding: 0.8cqw 0;
+          font-size: 2.9cqw;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          font-weight: 500;
+        }
+        .lotus-day {
+          font-size: 10cqw;
+          line-height: 1;
+          color: #B48A3C;
+          font-weight: 500;
+        }
+
+        .lotus-venue {
+          font-family: "Cinzel", serif;
+          font-size: 4.3cqw;
+          color: #B48A3C;
+          letter-spacing: 0.06em;
+          line-height: 1.2;
+          margin-top: 0.4cqw;
+        }
+
+        .lotus-phones {
+          margin-top: 2.2cqw;
+          font-size: 2.7cqw;
+          letter-spacing: 0.1em;
+          font-weight: 600;
+          line-height: 1.5;
+        }
+
+        .gap-s { margin-top: 1.2cqw; }
 
         /* Envelope Fold (Left Flap) */
         .flap-left {
@@ -283,11 +302,11 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           width: 100%;
           height: 54px;
           background: linear-gradient(
-            to bottom, 
-            #F0F0F0 0%, 
-            #FFFFFF 25%, 
-            #E8E8E8 50%, 
-            #FFFFFF 75%, 
+            to bottom,
+            #F0F0F0 0%,
+            #FFFFFF 25%,
+            #E8E8E8 50%,
+            #FFFFFF 75%,
             #DCDCDC 100%
           );
           box-shadow: 0 4px 6px rgba(0,0,0,0.1), inset 0 1px rgba(255,255,255,0.5);
@@ -333,33 +352,7 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           opacity: 0;
         }
 
-        /* Shimmer animation for gold accents */
-        @keyframes shimmer {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 0.8; }
-        }
-        .shimmer {
-          animation: shimmer 3s ease-in-out infinite;
-        }
-
         @media (max-width: 600px) {
-          .envelope-container {
-            width: 340px;
-            height: 520px;
-          }
-          .text-names {
-            font-size: 46px;
-          }
-          .text-ampersand {
-            font-size: 32px;
-          }
-          .corner-ornament {
-            width: 45px;
-            height: 45px;
-          }
-          .card-border {
-            padding: 30px 16px;
-          }
           .bow-center {
             width: 140px;
             height: 90px;
@@ -377,66 +370,63 @@ export function EnvelopeOpening({ onComplete, onMusicStart }: { onComplete: () =
           {/* Base shadow behind the card */}
           <div className="envelope-base"></div>
 
-          {/* Inner Card */}
+          {/* Inner Card — lotus invitation */}
           <div className="card-container">
-            <div className="card-border">
-              {/* 4 Corner Gold Ornaments */}
-              <svg className="corner-ornament corner-tl" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#D4AF37" strokeWidth="0.8" opacity="0.6"/>
-                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#D4AF37" opacity="0.08"/>
-                <circle cx="5" cy="5" r="2" fill="#D4AF37" opacity="0.5"/>
-                <path d="M8,5 Q12,8 5,12" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4"/>
-                <path d="M5,8 Q8,12 12,5" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
-              </svg>
-              <svg className="corner-ornament corner-tr" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#D4AF37" strokeWidth="0.8" opacity="0.6"/>
-                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#D4AF37" opacity="0.08"/>
-                <circle cx="5" cy="5" r="2" fill="#D4AF37" opacity="0.5"/>
-                <path d="M8,5 Q12,8 5,12" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4"/>
-                <path d="M5,8 Q8,12 12,5" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
-              </svg>
-              <svg className="corner-ornament corner-bl" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#D4AF37" strokeWidth="0.8" opacity="0.6"/>
-                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#D4AF37" opacity="0.08"/>
-                <circle cx="5" cy="5" r="2" fill="#D4AF37" opacity="0.5"/>
-                <path d="M8,5 Q12,8 5,12" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4"/>
-                <path d="M5,8 Q8,12 12,5" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
-              </svg>
-              <svg className="corner-ornament corner-br" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5,5 L5,25 C5,15 15,5 25,5 L5,5 Z" fill="none" stroke="#D4AF37" strokeWidth="0.8" opacity="0.6"/>
-                <path d="M5,5 L5,18 C5,12 12,5 18,5 L5,5 Z" fill="#D4AF37" opacity="0.08"/>
-                <circle cx="5" cy="5" r="2" fill="#D4AF37" opacity="0.5"/>
-                <path d="M8,5 Q12,8 5,12" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4"/>
-                <path d="M5,8 Q8,12 12,5" stroke="#D4AF37" strokeWidth="0.5" fill="none" opacity="0.4" className="shimmer"/>
-              </svg>
+            <LotusFlower line className="lotus-art art-tl" />
+            <GoldSprig className="lotus-art art-sprig" />
+            <LotusLeaf className="lotus-art art-leaf-l" />
+            <LotusFlower className="lotus-art art-lotus-r" />
+            <LotusBud className="lotus-art art-bud" />
+            <LotusLeaf className="lotus-art art-leaf-r" />
+            <LotusFlower className="lotus-art art-lotus-b" />
 
-              <div className="text-eyebrow">
-                {guestName ? `Dear ${guestName},` : 'Promise of Love'}
+            <div className="lotus-frame" />
+
+            <div className="lotus-content">
+              <div className="lotus-top">
+                <span />
+                <LotusIcon />
+                <span />
               </div>
 
-              <div className="divider">
-                <div className="divider-line" />
-                <div className="divider-diamond" />
-                <div className="divider-line" />
+              <h1 className="lotus-name">Amindu</h1>
+              <div className="lotus-caps">Loving son of<br />Mr. &amp; Mrs.</div>
+              <div className="lotus-caps lotus-parents">A.J.A.S. Rajapaksha</div>
+
+              <div className="lotus-caps lotus-with">With</div>
+              <LotusDivider />
+
+              <h1 className="lotus-name">Ushera</h1>
+              <div className="lotus-caps">Loving daughter of<br />Mr. &amp; Mrs.</div>
+              <div className="lotus-caps lotus-parents">P.A. Nalin Wimal Janaka</div>
+
+              <div className="lotus-caps gap-s">
+                Request the honour of the presence of<br />
+                {guestName ? (
+                  <span className="lotus-guest">{guestName}</span>
+                ) : (
+                  'Mr. / Mr. & Mrs. / Miss / Family'
+                )}
               </div>
 
-              <h1 className="text-names">
-                <span><span style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic' }}>A</span>mindu</span>
-                <span className="text-ampersand">&</span>
-                &nbsp;Ushera
-              </h1>
+              <LotusDivider />
 
-              <div className="divider">
-                <div className="divider-line" />
-                <div className="divider-diamond" />
-                <div className="divider-line" />
+              <div className="lotus-caps">On the occasion of their marriage</div>
+
+              <div className="lotus-caps lotus-month">December</div>
+              <div className="lotus-date">
+                <span className="lotus-date-side">Thursday</span>
+                <span className="lotus-day">10</span>
+                <span className="lotus-date-side">2026</span>
               </div>
 
-              <div className="text-details">
-                Request the honour of your presence<br />
-                <span className="text-date">Thursday 10 December 2026 At 09:00 AM</span>
-                <span className="text-church">The Grand Silveray</span><br />
-                Ratnapura
+              <div className="lotus-caps gap-s">From 10.00 a.m to 4.00 p.m<br />at</div>
+              <div className="lotus-venue">The Grand Silveray</div>
+              <div className="lotus-caps">Rathnapura</div>
+              <div className="lotus-caps">(Poruwa ceremony at 9.00 am)</div>
+
+              <div className="lotus-caps lotus-phones">
+                071 398 8073 &nbsp;·&nbsp; 070 273 9670
               </div>
             </div>
           </div>
